@@ -46,6 +46,14 @@ uint8_t workbuf[4096]; // Working buffer for f_fdisk function.
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
+// Attempt to initialize flash transport for external chip
+#define OFF_BOARD_FLASH_USE_CS 0
+#define OFF_BOARD_FLASH_USE_SPI SPI
+
+Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
+
+
+
 	// Attempt to initialize flash transport for external chip
 	#define OFF_BOARD_FLASH_USE_CS 0
 	#define OFF_BOARD_FLASH_USE_SPI SPI

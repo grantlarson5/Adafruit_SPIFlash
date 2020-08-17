@@ -16,7 +16,15 @@
   Adafruit_FlashTransport_SPI flashTransport(EXTERNAL_FLASH_USE_CS, EXTERNAL_FLASH_USE_SPI);
 
 #else
-  #error No QSPI/SPI flash are defined on your board variant.h !
+  #warning No QSPI/SPI flash are defined on your board variant.h !
+
+// Attempt to initialize flash transport for external chip
+#define OFF_BOARD_FLASH_USE_CS 0
+#define OFF_BOARD_FLASH_USE_SPI SPI
+
+Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
+
+
 #endif
 
 Adafruit_SPIFlash flash(&flashTransport);
