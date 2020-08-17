@@ -1,13 +1,13 @@
 // Adafruit M0 Express CircuitPython Repair
 // Author: Limor Fried
 //
-/* 
+/*
  *  This script can be useful if you seriously bork up your CircuitPython
  *  install. It will find any files named main.py, boot.py, main.txt, code.py
  *  or code.txt and move them to backup files. its a tad slow but then you
  *  can reload circuitpython safely. This example right now is only for
  *  the Metro M0 Express & Circuit Playground M0 but i have a...
- *  
+ *
  *  TODO: automagically detect if it's Feather/Metro/CircuitPlayground!
  */
 
@@ -29,12 +29,11 @@
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
-// Attempt to initialize flash transport for external chip
-#define OFF_BOARD_FLASH_USE_CS 0
-#define OFF_BOARD_FLASH_USE_SPI SPI
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
 
-Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
-
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 
 #endif
 
@@ -52,12 +51,12 @@ Adafruit_NeoPixel pixel = Adafruit_NeoPixel(1, NEOPIN, NEO_GRB + NEO_KHZ800);
 void setup() {
   Serial.begin(115200);
   //while (!Serial);
-  delay(1000); // small delay in case we want to watch it on the serial port  
+  delay(1000); // small delay in case we want to watch it on the serial port
   Serial.println("Adafruit Express CircuitPython Flash Repair");
-  
+
   pixel.begin();             // This initializes the NeoPixel library
   pixel.setBrightness(30);   // not too bright!
-  
+
   // Initialize flash library and check its chip ID.
   if (!flash.begin()) {
     Serial.println("Error, failed to initialize flash chip!");
@@ -73,12 +72,12 @@ void setup() {
     error(3);
   }
   Serial.println("Mounted filesystem!");
-  
-  moveFile("boot.py", "bootpy.bak");    
-  moveFile("main.py", "mainpy.bak");    
-  moveFile("main.txt", "maintxt.bak");    
-  moveFile("code.py", "codepy.bak");    
-  moveFile("code.txt", "codetxt.bak");    
+
+  moveFile("boot.py", "bootpy.bak");
+  moveFile("main.py", "mainpy.bak");
+  moveFile("main.txt", "maintxt.bak");
+  moveFile("code.py", "codepy.bak");
+  moveFile("code.txt", "codetxt.bak");
 
   Serial.println("Finished!");
 }
@@ -123,16 +122,16 @@ boolean moveFile(char *file, char *dest) {
     }
     int toread = min(BUFFERSIZ-1, avail);
     char buffer[BUFFERSIZ];
-    
+
     int numread = source.read(buffer, toread);
     if (numread != toread) {
       Serial.print("Failed to read ");
       Serial.print(toread);
-      Serial.print(" bytes, got "); 
+      Serial.print(" bytes, got ");
       Serial.print(numread);
       error(5);
     }
-    buffer[toread] = 0;      
+    buffer[toread] = 0;
     Serial.print(buffer);
     if (backup.write(buffer, toread) != toread) {
         Serial.println("Error, couldn't write data to backup file!");
@@ -150,7 +149,7 @@ boolean moveFile(char *file, char *dest) {
         Serial.print("Error, couldn't delete ");
         Serial.println(file);
         error(10);
-     } 
+     }
   }
   pixel.setPixelColor(0, pixel.Color(0,100,0)); pixel.show();
   delay(100);
@@ -165,6 +164,6 @@ void error(uint8_t i) {
       pixel.setPixelColor(0, pixel.Color(0,0,0)); pixel.show();
       delay(200);
     }
-    delay(1000);    
+    delay(1000);
   }
 }

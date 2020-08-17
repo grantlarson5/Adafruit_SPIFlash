@@ -34,12 +34,11 @@
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
-// Attempt to initialize flash transport for external chip
-#define OFF_BOARD_FLASH_USE_CS 0
-#define OFF_BOARD_FLASH_USE_SPI SPI
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
 
-Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
-
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 
 #endif
 
@@ -58,7 +57,7 @@ void setup() {
   }
 
   Serial.print("Initializing Filesystem on external flash...");
-  
+
   // Init external flash
   flash.begin();
 

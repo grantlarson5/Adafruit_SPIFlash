@@ -16,12 +16,11 @@
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
-// Attempt to initialize flash transport for external chip
-#define OFF_BOARD_FLASH_USE_CS 0
-#define OFF_BOARD_FLASH_USE_SPI SPI
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
 
-Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
-
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 
 #endif
 
@@ -43,7 +42,7 @@ void error(char *str) {
   while (1) delay(1);
 }
 
-void setup(void) 
+void setup(void)
 {
   Serial.begin(115200);
   while (!Serial) delay(1);
@@ -65,14 +64,14 @@ void setup(void)
   Serial.println("OK");
 }
 
-void loop(void) 
+void loop(void)
 {
   while (Serial.available()) { Serial.read(); }
   Serial.println(F("FLASH DUMPER - Hello! Press E (rase), W (rite), V (erify), or D (ump) to begin"));
 
   while (!Serial.available());
   char cmd = toupper(Serial.read());
-  
+
   uint16_t pagesize = flash.pageSize();
   Serial.print("Page size: ");
   Serial.println(pagesize);
@@ -85,7 +84,7 @@ void loop(void)
      if (! dataFile) {
        error("error opening flshdump.bin");
      }
-    
+
     Serial.println("Dumping FLASH to disk");
     for (int32_t page=0; page < flash.numPages() ; page++)  {
       memset(buffer, 0, pagesize);
@@ -94,14 +93,14 @@ void loop(void)
       uint16_t r = flash.readBuffer (page * pagesize, buffer, pagesize);
       //Serial.print(r); Serial.print(' '); PrintHex(buffer, r);
       dataFile.write(buffer, r);
-    }  
+    }
     dataFile.flush();
     dataFile.close();
   }
   if (cmd == 'E') {
     Serial.println("Erasing chip");
     flash.eraseChip();
-    
+
   }
   if (cmd == 'V') {
      dataFile = sd.open("flshdump.bin", FILE_READ);
@@ -112,14 +111,14 @@ void loop(void)
     for (int32_t page=0; page < flash.numPages() ; page++)  {
       memset(buffer, 0, pagesize);
       memset(buffer2, 0, pagesize);
-      
+
       Serial.print("// Verifying page ");  Serial.println(page);
-      
+
       uint16_t r = flash.readBuffer (page * pagesize, buffer, pagesize);
       if (r != pagesize) {
         error("Flash read failure");
       }
-      
+
       if (r != dataFile.read(buffer2, r)) {
         error("SD read failure");
       }
@@ -129,11 +128,11 @@ void loop(void)
         PrintHex(buffer2, r);
         Serial.println("verification failed");
         return;
-      }      
-    }  
+      }
+    }
     Serial.println("Done!");
     dataFile.close();
-  }  
+  }
 
   if (cmd == 'W') {
      dataFile = sd.open("flshdump.bin", FILE_READ);
@@ -144,24 +143,24 @@ void loop(void)
     Serial.println("Writing FLASH from disk");
     for (int32_t page=0; page < flash.numPages() ; page++)  {
       memset(buffer, 0, pagesize);
-      
+
       int16_t r = dataFile.read(buffer, pagesize);
-      if (r == 0) 
+      if (r == 0)
         break;
       Serial.print("// Writing page ");  Serial.println(page);
 
       if (r != flash.writeBuffer (page * r, buffer, r)) {
         error("Flash write failure");
       }
-    }  
+    }
     Serial.println("Done!");
     dataFile.close();
-  } 
+  }
 }
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Prints a hexadecimal value in plain characters, along with
             the char equivalents in the following format:
 
@@ -174,7 +173,7 @@ void loop(void)
 void PrintHexChar(const byte * data, const uint32_t numBytes)
 {
   uint32_t szPos;
-  for (szPos=0; szPos < numBytes; szPos++) 
+  for (szPos=0; szPos < numBytes; szPos++)
   {
 	// Append leading 0 for small values
 	if (data[szPos] <= 0xF)
@@ -186,7 +185,7 @@ void PrintHexChar(const byte * data, const uint32_t numBytes)
 	}
   }
   Serial.print("  ");
-  for (szPos=0; szPos < numBytes; szPos++) 
+  for (szPos=0; szPos < numBytes; szPos++)
   {
     if (data[szPos] <= 0x1F)
 	  Serial.print('.');
@@ -197,7 +196,7 @@ void PrintHexChar(const byte * data, const uint32_t numBytes)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Prints a hexadecimal value in plain characters
 
     @param  data      Pointer to the byte data
@@ -207,7 +206,7 @@ void PrintHexChar(const byte * data, const uint32_t numBytes)
 void PrintHex(const byte * data, const uint32_t numBytes)
 {
   uint32_t szPos;
-  for (szPos=0; szPos < numBytes; szPos++) 
+  for (szPos=0; szPos < numBytes; szPos++)
   {
     Serial.print("0x");
 	// Append leading 0 for small values

@@ -18,12 +18,11 @@
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
-// Attempt to initialize flash transport for external chip
-#define OFF_BOARD_FLASH_USE_CS 0
-#define OFF_BOARD_FLASH_USE_SPI SPI
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
 
-Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
-
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 
 #endif
 
@@ -44,12 +43,12 @@ void setup() {
 
   // Init file system on the flash
   fatfs.begin(&flash);
-  
-  // Wait for USB Serial 
+
+  // Wait for USB Serial
   while (!Serial) {
     SysCall::yield();
   }
-  
+
   if (!root.open("/")) {
     Serial.println("open root failed");
   }
@@ -69,7 +68,7 @@ void setup() {
     Serial.println();
     file.close();
   }
-  
+
   if (root.getError()) {
     Serial.println("openNext failed");
   } else {

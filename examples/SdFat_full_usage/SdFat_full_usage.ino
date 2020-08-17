@@ -39,12 +39,11 @@
 #else
   #warning No QSPI/SPI flash are defined on your board variant.h !
 
-// Attempt to initialize flash transport for external chip
-#define OFF_BOARD_FLASH_USE_CS 0
-#define OFF_BOARD_FLASH_USE_SPI SPI
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
 
-Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
-
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 
 #endif
 
@@ -82,10 +81,10 @@ void setup() {
   // You can use the same exists function to check for the existance of a file too.
   if (!fatfs.exists("/test")) {
     Serial.println("Test directory not found, creating...");
-    
+
     // Use mkdir to create directory (note you should _not_ have a trailing slash).
     fatfs.mkdir("/test");
-    
+
     if ( !fatfs.exists("/test") ) {
       Serial.println("Error, failed to create directory!");
       while(1) yield();
@@ -201,7 +200,7 @@ void setup() {
   while (child) {
     char filename[64];
     child.getName(filename, sizeof(filename));
-    
+
     // Print the file name and mention if it's a directory.
     Serial.print("- "); Serial.print(filename);
     if (child.isDirectory()) {
