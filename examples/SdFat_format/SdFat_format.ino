@@ -44,19 +44,25 @@ uint8_t workbuf[4096]; // Working buffer for f_fdisk function.
   Adafruit_FlashTransport_SPI flashTransport(EXTERNAL_FLASH_USE_CS, EXTERNAL_FLASH_USE_SPI);
 
 #else
-  #error No QSPI/SPI flash are defined on your board variant.h !
+  #warning No QSPI/SPI flash are defined on your board variant.h !
+
+	// Attempt to initialize flash transport for external chip
+	#define OFF_BOARD_FLASH_USE_CS 0
+	#define OFF_BOARD_FLASH_USE_SPI SPI
+
+	Adafruit_FlashTransport_SPI flashTransport(OFF_BOARD_FLASH_USE_CS, OFF_BOARD_FLASH_USE_SPI);
 #endif
 
 Adafruit_SPIFlash flash(&flashTransport);
 
 // file system object from SdFat
 FatFileSystem fatfs;
-  
+
 void setup() {
   // Initialize serial port and wait for it to open before continuing.
   Serial.begin(115200);
   while (!Serial) delay(100);
-  
+
   Serial.println("Adafruit SPI Flash FatFs Format Example");
 
   // Initialize flash library and check its chip ID.
@@ -105,7 +111,7 @@ void setup() {
 
   // sync to make sure all data is written to flash
   flash.syncBlocks();
-  
+
   Serial.println("Formatted flash!");
 
   // Check new filesystem

@@ -80,6 +80,6 @@ private:
 };
 
 // for debugging
-#define SPIFLASH_DEBUG 0
+#define SPIFLASH_DEBUG 1
 
 #endif /* ADAFRUIT_SPIFLASHBASE_H_ */
